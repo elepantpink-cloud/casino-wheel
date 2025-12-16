@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crazy Time Bonus Wheel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Bungee&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#070000;
+  --card:#141414;
+  --gold:#ffd66b;
+  --gold-soft:#ffe9a3;
+  --text:#ffffff;
+  --muted:#b3b3b3;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,214,107,.25), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(255,80,80,.18), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(120,40,40,.25), transparent 50%),
+    linear-gradient(180deg, #1a0000, #070000);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+
+/* CASINO ELEMENTS */
+body::before,
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+}
+
+body::before{
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255,214,107,.35) 0 6px, transparent 7px),
+    radial-gradient(circle at 30% 40%, rgba(255,214,107,.25) 0 5px, transparent 6px),
+    radial-gradient(circle at 70% 30%, rgba(255,214,107,.3) 0 6px, transparent 7px),
+    radial-gradient(circle at 85% 55%, rgba(255,214,107,.2) 0 5px, transparent 6px),
+    radial-gradient(circle at 55% 75%, rgba(255,214,107,.25) 0 6px, transparent 7px);
+  opacity:.8;
+}
+
+body::after{
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,.02) 0 2px,
+      transparent 2px 14px
+    ),
+    radial-gradient(circle at 80% 15%, rgba(255,255,255,.04), transparent 35%),
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,.035), transparent 40%);
+}
+
+/* LAYOUT */
+.wrapper{
+  max-width:440px;
+  margin:auto;
+  padding:50px 24px 90px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:28px;
+  padding:36px 30px;
+  margin-bottom:60px;
+  box-shadow:0 40px 100px rgba(0,0,0,.85);
+  text-align:center;
+}
+
+/* TYPO */
+.circus{
+  font-family:'Bungee', cursive;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  text-shadow:
+    0 0 6px rgba(255,255,255,.25),
+    0 0 16px rgba(255,214,107,.45);
+}
+
+h1{font-size:34px;margin-bottom:16px}
+h2{font-size:26px;margin-bottom:20px}
+
+.subtitle{
+  font-size:15px;
+  color:var(--muted);
+  line-height:1.7;
+}
+
+.divider{
+  width:70px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:26px auto;
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:18px;
+  font-size:18px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-soft));
+  color:#000;
+  cursor:pointer;
+  box-shadow:0 0 30px rgba(255,214,107,.4);
+  transition:.25s ease;
+}
+
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 45px rgba(255,214,107,.65);
+}
+
+/* ROULETTE */
+.roulette-wrap{
+  position:relative;
+  width:300px;
+  height:300px;
+  margin:28px auto 20px;
+}
+
+.pointer{
+  position:absolute;
+  top:-20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:0;height:0;
+  border-left:14px solid transparent;
+  border-right:14px solid transparent;
+  border-top:28px solid var(--gold);
+  z-index:10;
+}
+
+.roulette{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:
+    conic-gradient(
+      #2c6fb3 0deg 45deg,
+      #1f8f4c 45deg 90deg,
+      #e0b34a 90deg 135deg,
+      #b33a3a 135deg 180deg,
+      #2c6fb3 180deg 225deg,
+      #1f8f4c 225deg 270deg,
+      #e0b34a 270deg 315deg,
+      #8f6d3a 315deg 360deg
+    );
+  box-shadow:
+    inset 0 0 0 14px #0b0b0b,
+    inset 0 0 0 20px var(--gold),
+    0 35px 90px rgba(0,0,0,.9);
+  transition:transform 6s cubic-bezier(.12,.92,.18,1);
+}
+
+.segment{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform-origin:0 0;
+  font-size:18px;
+  font-family:'Luckiest Guy', cursive;
+  color:#fff;
+  text-shadow:0 2px 6px rgba(0,0,0,.8);
+}
+
+.center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:94px;
+  height:94px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#ffcc55,#ffe9a3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Luckiest Guy', cursive;
+  font-size:20px;
+  color:#000;
+  box-shadow:0 10px 30px rgba(0,0,0,.7);
+}
+
+/* POPUP */
+#overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(5px);
+  z-index:999;
+}
+
+#popup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(.85);
+  background:linear-gradient(180deg,#1a1a1a,#0f0f0f);
+  border-radius:26px;
+  padding:36px 30px;
+  text-align:center;
+  box-shadow:0 0 90px rgba(255,214,107,.7);
+  opacity:0;
+  transition:.4s ease;
+}
+
+#popup.show{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+#popup .win{
+  font-family:'Luckiest Guy', cursive;
+  font-size:28px;
+  color:var(--gold);
+  margin:14px 0 20px;
+}
+
+/* FORM */
+#claimForm{display:none}
+
+input{
+  width:100%;
+  padding:16px;
+  margin-bottom:16px;
+  border-radius:14px;
+  border:1px solid #2a2a2a;
+  background:#0a0a0a;
+  color:#fff;
+  font-size:15px;
+}
+
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:#7f7f7f;
+  margin-top:50px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper" id="page">
+
+  <div class="card">
+    <h1 class="circus">Reveal My Bonus</h1>
+    <div class="subtitle">
+      Spin the private wheel and unlock your reward<br>
+      Available for players in <span style="color:var(--gold)">Portugal</span>
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="card" id="wheelCard">
+    <h2 class="circus">Bonus Wheel</h2>
+
+    <div class="roulette-wrap">
+      <div class="pointer"></div>
+
+      <div id="roulette" class="roulette">
+        <div class="segment" style="transform:rotate(22.5deg) translateX(70px);">€50</div>
+        <div class="segment" style="transform:rotate(67.5deg) translateX(70px);">€0</div>
+        <div class="segment" style="transform:rotate(112.5deg) translateX(70px);">€20</div>
+        <div class="segment" style="transform:rotate(157.5deg) translateX(70px);">€100</div>
+        <div class="segment" style="transform:rotate(202.5deg) translateX(70px);">€50</div>
+        <div class="segment" style="transform:rotate(247.5deg) translateX(70px);">€0</div>
+        <div class="segment" style="transform:rotate(292.5deg) translateX(70px);">€20</div>
+        <div class="segment" style="transform:rotate(337.5deg) translateX(70px);">€100</div>
+      </div>
+
+      <div class="center">BONUS</div>
+    </div>
+
+    <button class="circus" onclick="spin()">Spin the Wheel</button>
+  </div>
+
+</div>
+
+<div id="overlay">
+  <div id="popup">
+    <h2 class="circus">Congratulations</h2>
+    <div class="win">€100 BONUS</div>
+    <button class="circus" onclick="continueToForm()">Continue</button>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div class="card" id="claimForm">
+    <h1 class="circus">Claim Your Bonus</h1>
+    <div class="subtitle">Enter your details to activate your reward</div>
+    <div class="divider"></div>
+
+    <input type="text" placeholder="Full Name">
+    <input type="email" placeholder="Email Address">
+    <input type="tel" placeholder="Phone Number">
+
+    <button class="circus">Activate Bonus</button>
+  </div>
+</div>
+
+<div class="footer">
+  Terms · Privacy · Responsible Gaming · 18+
+</div>
+
+<script>
+let spun=false;
+
+function spin(){
+  if(spun) return;
+  spun=true;
+
+  const landingAngle = 112.5;
+  const spins = 360 * 6;
+
+  document.getElementById('roulette').style.transform =
+    `rotate(${spins + landingAngle}deg)`;
+
+  setTimeout(()=>{
+    document.getElementById('overlay').style.display='block';
+    document.getElementById('popup').classList.add('show');
+  },6000);
+}
+
+function continueToForm(){
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('page').style.display='none';
+  document.getElementById('claimForm').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
